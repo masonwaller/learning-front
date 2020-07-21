@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { GameEngine } from "react-native-game-engine";
 import Constants from "./Constants";
 import Head from "./Head";
@@ -16,8 +16,8 @@ export default function App() {
           engine = ref;
         }}
         style={{
-          width: size,
-          height: size,
+          width: size + 20,
+          height: size + 20,
           flex: null,
           backgroundColor: "#000000"
         }}
@@ -25,14 +25,52 @@ export default function App() {
         entities={{
           head: {
             position: [0, 0],
-            xspeed: 1,
-            yspeed: 0,
+            xspeed: 0,
+            yspeed: 1,
+            updateFrequency: 10,
+            nextMove: 10,
             size: Constants.cell_size,
             renderer: <Head />
           }
         }}
       />
-      <StatusBar style="auto" />
+      <View style={styles.controls}>
+        <View style={styles.controlRow}>
+          <TouchableOpacity
+            onPress={() => {
+              engine.dispatch({ type: "move-up" });
+            }}
+          >
+            <View style={styles.control} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.controlRow}>
+          <TouchableOpacity
+            onPress={() => {
+              engine.dispatch({ type: "move-left" });
+            }}
+          >
+            <View style={styles.control} />
+          </TouchableOpacity>
+          <View style={[styles.control, { backgroundColor: null }]} />
+          <TouchableOpacity
+            onPress={() => {
+              engine.dispatch({ type: "move-right" });
+            }}
+          >
+            <View style={styles.control} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.controlRow}>
+          <TouchableOpacity
+            onPress={() => {
+              engine.dispatch({ type: "move-down" });
+            }}
+          >
+            <View style={styles.control} />
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
@@ -43,5 +81,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center"
+  },
+  controls: {
+    width: 300,
+    height: 300,
+    flexDirection: "column"
+  },
+  controlRow: {
+    height: 100,
+    width: 300,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row"
+  },
+  control: {
+    width: 100,
+    height: 100,
+    backgroundColor: "blue"
   }
 });
